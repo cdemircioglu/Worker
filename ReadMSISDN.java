@@ -52,7 +52,7 @@ public class ReadMSISDN {
 	        	{
 	        		wantSleep();
 	        		System.out.println("Server number is " + ServerNumber + ", rejecting the message.");
-	        		if (hostnamenumber >= ServerNumber)
+	        		if (hostnamenumber <= ServerNumber)
 	        			break;
 	        	}
 	        } else
