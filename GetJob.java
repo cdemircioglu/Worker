@@ -37,7 +37,7 @@ class GetJob implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	      System.out.println("Thread " +  threadName + " exiting.");
+	      
 	   }
 	   
 	   public void start () {
