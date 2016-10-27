@@ -16,7 +16,10 @@ public class ReadMSISDN {
 	  public static void Read() throws Exception {
 		//Create the connection 
 	    ConnectionFactory factory = new ConnectionFactory();
-	    factory.setHost("localhost");
+		factory.setHost("hwlinux.cloudapp.net");
+		factory.setUsername("controller");
+		factory.setPassword("KaraburunCe2");
+
 	    final Connection connection = factory.newConnection();
 	    final Channel channel = connection.createChannel();
 
