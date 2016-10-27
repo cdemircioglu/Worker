@@ -1,5 +1,5 @@
 javac -cp "rabbitmq-client.jar:." ReadMSISDN.java -Xlint:unchecked
 javac -cp "rabbitmq-client.jar:." GetJob.java -Xlint:unchecked
 javac -cp "rabbitmq-client.jar:." ReceiveWorkServer.java -Xlint:unchecked
-javac -cp "rabbitmq-client.jar:." CheckJob.java -Xlint:unchecked
-java -cp "rabbitmq-client.jar:." CheckJob
+javac -cp "rabbitmq-client.jar:." JobCheck.java -Xlint:unchecked
+java -cp "rabbitmq-client.jar:." JobCheck
