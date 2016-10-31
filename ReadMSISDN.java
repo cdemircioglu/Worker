@@ -1,5 +1,10 @@
 import com.rabbitmq.client.*;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.concurrent.TimeoutException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -25,7 +30,36 @@ public class ReadMSISDN {
 	        }
 	  }
 	  
+	  public static void writeFile3(String cmd) throws IOException {
+          PrintWriter pw = new PrintWriter(new FileWriter("RCode_WorkerCurrent.R"));
+                  pw.write(cmd);
+          pw.close();
+	  }
+
+	  public static String readFile(String filename) throws IOException
+      {
+          String content = null;
+          File file = new File(filename); //for ex foo.txt
+          FileReader reader = null;
+          try {
+              reader = new FileReader(file);
+              char[] chars = new char[(int) file.length()];
+              reader.read(chars);
+              content = new String(chars);
+              reader.close();
+          } catch (IOException e) {
+              e.printStackTrace();
+          } finally {
+              if(reader !=null){reader.close();}
+          }
+          return content;
+      }
+
+	  
 	  public static void Read() throws Exception {
+		//Read R Template
+		String template = readFile("RCode_Worker.R");
+		
 		//Create the connection 
 	    ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("hwlinux.cloudapp.net");
@@ -58,11 +92,11 @@ public class ReadMSISDN {
 	        } else
 	        {
 	        	System.out.println(" [x] Received '" + message + "'");	   
-	        	final Runtime rt = Runtime.getRuntime();
-	        	//String command = "Rscript RCode_Worker.R \"" + message+ "\"";
+	        	final Runtime rt = Runtime.getRuntime();	        	
+	        	writeFile3(template.replace("RRRR",message)); //Write to a new file
 	        	
-	            try{
-	                Process p = Runtime.getRuntime().exec("/usr/bin/Rscript /home/cem/worker/RCode_Worker.R ''<ShinnyParameters><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161031131350</value></parameter><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>msisdn</name><value>67110,169215,172683,173382,176704,176849,181783,183256,189459,191313</value></parameter></ShinnyParameters>'");
+	        	try{    
+	                Process p = Runtime.getRuntime().exec("Rscript.exe RCode_WorkerCurrent.R");
 
 	                int processComplete = p.waitFor();
 
@@ -76,7 +110,7 @@ public class ReadMSISDN {
 	                {
 	                    e.printStackTrace();
 	                }
-
+	            
 	        	
 	        	channel.basicAck(envelope.getDeliveryTag(), false);
 	        	//wantSleep();
@@ -90,7 +124,8 @@ public class ReadMSISDN {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}					
+		
 	    };
 	    
 	    channel.basicConsume(TASK_QUEUE_NAME, false, consumer);

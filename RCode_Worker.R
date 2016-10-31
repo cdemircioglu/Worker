@@ -7,8 +7,9 @@ library("XML")
 library("methods")
 
 # Get the arguments
-args <- commandArgs(trailingOnly = TRUE)
+#args <- commandArgs(trailingOnly = TRUE)
 #args <- "<ShinnyParameters><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161027174608</value></parameter><parameter><name>msisdn</name><value>95030611,95089837,95230764,95241826,95320597,95452031,95512677,95519835,95673236,95917936</value></parameter></ShinnyParameters>"
+args <- "RRRR"
 
 # Give the input file name to the function.
 xmlDoc <- xmlParse(args, asText=TRUE)
