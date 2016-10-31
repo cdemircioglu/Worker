@@ -31,7 +31,7 @@ msisdn <- parameterValue[7]
 con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "127.0.0.1", port = 3306, dbname = "testdata")
 
 #Create the query for xdr records
-src_query <- ("SELECT MSISDN, DOWNLOAD_BYTES FROM src_xdr WHERE MSISDN IN (aaa) AND IAB_TIER1 = 'bbb'")
+src_query <- ("SELECT MSISDN, DOWNLOAD_BYTES,HOST FROM src_xdr WHERE MSISDN IN (aaa) AND IAB_TIER1 = 'bbb'")
 src_query <- gsub("aaa",msisdn,src_query)
 src_query <- gsub("bbb",marketInterest,src_query)
 
@@ -128,6 +128,7 @@ for (row in 1:nrow(finalset)) {
 # Output string
 output <- '"2016-09-27","07:57:22",12345,98765,"x86_64","linux-gnu","BH","1.60.0-2","DE",23657'
 output <- gsub("linux-gnu",round(runif(1, 1, 25)),output) #Replace the package with a website
+output <- gsub("x86_64",runTime) #Replace the package with a website
 #output <- gsub("BH",website[round(runif(1, 1, 200))],output) #Replace the package with a website
 output <- gsub("07:57:22",format(Sys.time(), format = "%H:%M:%S"),output) #Repace the time with actual time
 output <- gsub("23657",round(runif(1, 1, 25)),output) #Replace the package with a website
