@@ -62,7 +62,7 @@ public class ReadMSISDN {
 	        	//String command = "Rscript RCode_Worker.R \"" + message+ "\"";
 	        	
 	            try{
-	                Process p = Runtime.getRuntime().exec("/usr/bin/Rscript /home/cem/worker/RCode_Worker.R \""+ message +"\"");
+	                Process p = Runtime.getRuntime().exec("/usr/bin/Rscript /home/cem/worker/RCode_Worker.R ''<ShinnyParameters><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161031131350</value></parameter><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>msisdn</name><value>67110,169215,172683,173382,176704,176849,181783,183256,189459,191313</value></parameter></ShinnyParameters>'");
 
 	                int processComplete = p.waitFor();
 
