@@ -59,7 +59,7 @@ public class ReadMSISDN {
 	        {
 	        	System.out.println(" [x] Received '" + message + "'");	   
 	        	final Runtime rt = Runtime.getRuntime();
-	        	String command = "Rscript RCode_Worker.R '" + message+ "'";
+	        	String command = "Rscript RCode_Worker.R \"" + message+ "\"";
 	        	System.out.println(command);
 	        	
 	        	Process myp = rt.exec(command);	
