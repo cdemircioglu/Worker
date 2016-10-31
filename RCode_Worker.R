@@ -144,7 +144,7 @@ arg <- paste(arg,output,sep="|")
 output <- substring(arg, 2) # Remove the first pipe
 
 # Command start
-cmdString <- paste('python send.py ', output, sep="")
+cmdString <- paste("python send.py '", output,"'", sep="")
 #cmdString <- paste('c:\\Python27\\python.exe send.py ', output, sep="")
 
 # Send the message
