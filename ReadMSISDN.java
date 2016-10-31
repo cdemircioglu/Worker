@@ -59,7 +59,13 @@ public class ReadMSISDN {
 	        {
 	        	System.out.println(" [x] Received '" + message + "'");	   
 	        	final Runtime rt = Runtime.getRuntime();
-	        	rt.exec("Rscript RCode_Worker.R '" + message+ "'");	
+	        	Process myp = rt.exec("Rscript RCode_Worker.R '" + message+ "'");	
+	        	try {
+					myp.waitFor();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	        	
 	        	channel.basicAck(envelope.getDeliveryTag(), false);
 	        	//wantSleep();
