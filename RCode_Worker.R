@@ -18,12 +18,12 @@ parameterName <- xpathSApply(xmlDoc,'//parameter/name',xmlValue)
 parameterValue<- xpathSApply(xmlDoc,'//parameter/value',xmlValue)  
 
 # Create the parameters
-runTime <- parameterValue[1]
-servercnt <- parameterValue[2]
-marketInterest <- parameterValue[3]
-perceivedValue <- as.numeric(parameterValue[4])
-costtoDeliver <- as.numeric(parameterValue[5])
-runnumber <- parameterValue[6]
+servercnt <- parameterValue[1]
+marketInterest <- parameterValue[2]
+perceivedValue <- as.numeric(parameterValue[3])
+costtoDeliver <- as.numeric(parameterValue[4])
+runnumber <- parameterValue[5]
+runTime <- parameterValue[6]
 msisdn <- parameterValue[7]
 
 #Create the connection string
