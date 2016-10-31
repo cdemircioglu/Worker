@@ -210,11 +210,10 @@ output <- gsub("07:57:22",format(Sys.time(), format = "%H:%M:%S"),output) #Repac
 output <- gsub("23657",round(runif(1, 1, 25)),output) #Replace the package with a website
 output <- gsub("9263737",round(runif(1, 1, 25)),output) #Replace the package with a website
 
-output
 
 # Command start
-#cmdString <- paste('python send.py ', output, sep="")
-cmdString <- paste('c:\\Python27\\python.exe send.py ', output, sep="")
+cmdString <- paste('python send.py ', output, sep="")
+#cmdString <- paste('c:\\Python27\\python.exe send.py ', output, sep="")
 
 
 # Send the message
