@@ -96,7 +96,7 @@ public class ReadMSISDN {
 	        	writeFile3(template.replace("RRRR",message)); //Write to a new file
 	        	
 	        	try{    
-	                Process p = Runtime.getRuntime().exec("Rscript.exe RCode_WorkerCurrent.R");
+	                Process p = Runtime.getRuntime().exec("Rscript RCode_WorkerCurrent.R");
 
 	                int processComplete = p.waitFor();
 
