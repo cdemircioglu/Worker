@@ -27,10 +27,10 @@ runnumber <- parameterValue[6]
 msisdn <- parameterValue[7]
 
 #Create the connection string
-con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "localhost", port = 3306, dbname = "testdata")
+con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "127.0.0.1", port = 3306, dbname = "testdata")
 
 #Create the query for xdr records
-src_query <- ("SELECT MSISDN, DOWNLOADBYTES FROM src_xdr WHERE MSISDN IN (aaa) AND IAB_TIER1 = 'bbb'")
+src_query <- ("SELECT MSISDN, DOWNLOAD_BYTES FROM src_xdr WHERE MSISDN IN (aaa) AND IAB_TIER1 = 'bbb'")
 src_query <- gsub("aaa",msisdn,src_query)
 src_query <- gsub("bbb",marketInterest,src_query)
 
