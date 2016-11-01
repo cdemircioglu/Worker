@@ -9,7 +9,10 @@ library("methods")
 # Get the arguments
 #args <- commandArgs(trailingOnly = TRUE)
 #args <- "<ShinnyParameters><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161027174608</value></parameter><parameter><name>msisdn</name><value>95030611,95089837,95230764,95241826,95320597,95452031,95512677,95519835,95673236,95917936</value></parameter></ShinnyParameters>"
+#args <- "<ShinnyParameters><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161031102213</value></parameter><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>msisdn</name><value>258493,1259860,1267845,1268277,1268509,1269925,1270078,1270582,1274345,1274776</value></parameter></ShinnyParameters>"
 args <- "RRRR"
+
+
 
 # Give the input file name to the function.
 xmlDoc <- xmlParse(args, asText=TRUE)
@@ -57,7 +60,7 @@ src_query <- ("SELECT MSISDN, SUM(DOWNLOAD_BYTES)/COUNT(1) AS DOWNLOAD_BYTES FRO
 src_query <- gsub("aaa",msisdn,src_query)
 
 #Get the records for xdr
-src_xdr <<- dbGetQuery(con, src_query)
+src_xdr_bytes <<- dbGetQuery(con, src_query)
 
 #Disconnect from the database
 dbDisconnect(con)
@@ -83,14 +86,15 @@ fun_Afflunce <- function()
 #Response function
 fun_Response <- function() 
 {
-    #The function is 
-    # SQRT(MarketInterest) * SQRT(Afflunce) * Perceived_Value * SprayPray
-    #allRecordsMSISDN <- src_xdr[which(src_xdr$MSISDN == MSISDN),] #All market interests per MSISDN
-    #downloadBytes <- allRecordsMSISDN[which(allRecordsMSISDN$IAB_TIER2 == marketInterest),10] #Get the downloaded bytes
-    #f_marketInterest <- sum(downloadBytes)/NROW(downloadBytes)/10099
-    #f_afflunce <-  #Calculate afflunce based on MSISDN number
-    f_sprayPray <- src_marketinterest[1,1] #Calculate spray and pray factor based on market interest
-    src_profile["RESPONSE"] <<- sqrt(src_xdr$DOWNLOAD_BYTES)*sqrt(src_profile$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
+  #The function is 
+  # SQRT(MarketInterest) * SQRT(Afflunce) * Perceived_Value * SprayPray
+  #allRecordsMSISDN <- src_xdr[which(src_xdr$MSISDN == MSISDN),] #All market interests per MSISDN
+  #downloadBytes <- allRecordsMSISDN[which(allRecordsMSISDN$IAB_TIER2 == marketInterest),10] #Get the downloaded bytes
+  #f_marketInterest <- sum(downloadBytes)/NROW(downloadBytes)/10099
+  #f_afflunce <-  #Calculate afflunce based on MSISDN number
+  f_sprayPray <- src_marketinterest[1,1] #Calculate spray and pray factor based on market interest
+  src_profile["RESPONSE"] <<- sqrt(src_xdr_bytes$DOWNLOAD_BYTES)*sqrt(src_profile$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
+  
 }  
 
 #Economic Benefit function 
@@ -118,28 +122,30 @@ finalset <- finalset %>%
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
+finalset["HOST"] <- gsub("\r","",src_xdr[1:nrow(finalset),3])
+
 
 #Create the arguments string
 arg <- ""
 
 #Loop through 
 for (row in 1:nrow(finalset)) {
-####
-# Output string
-output <- '"2016-09-27","07:57:22",12345,98765,"x86_64","linux-gnu","BH","1.60.0-2","DE",23657'
-output <- gsub("linux-gnu",round(runif(1, 1, 25)),output) #Replace the package with a website
-output <- gsub("x86_64",runTime) #Replace the package with a website
-#output <- gsub("BH",website[round(runif(1, 1, 200))],output) #Replace the package with a website
-output <- gsub("07:57:22",format(Sys.time(), format = "%H:%M:%S"),output) #Repace the time with actual time
-output <- gsub("23657",round(runif(1, 1, 25)),output) #Replace the package with a website
-output <- gsub("12345",finalset[row,1],output) #Replace the package with a website
-output <- gsub("98765",finalset[row,2],output) #Replace the package with a website
-
-arg <- paste(arg,output,sep="|")
-
-#look up stuff using data from the row
-#write stuff to the file
-
+  ####
+  # Output string
+  output <- '"2016-09-27","07:57:22",12345,98765,x86_64,"linux-gnu","BH","1.60.0-2","DE",23657'
+  output <- gsub("linux-gnu",round(runif(1, 1, 25)),output) #Replace the package with a website
+  output <- gsub("x86_64",runTime,output) #Replace the package with a website
+  output <- gsub("BH",finalset[row,3],output) #Replace the package with a website
+  output <- gsub("07:57:22",format(Sys.time(), format = "%H:%M:%S"),output) #Repace the time with actual time
+  output <- gsub("23657",round(runif(1, 1, 25)),output) #Replace the package with a website
+  output <- gsub("12345",finalset[row,1],output) #Replace the package with a website
+  output <- gsub("98765",finalset[row,2],output) #Replace the package with a website
+  
+  arg <- paste(arg,output,sep="|")
+  
+  #look up stuff using data from the row
+  #write stuff to the file
+  print(output)
 }
 
 #Recast the data
@@ -151,6 +157,5 @@ cmdString <- paste("python send.py '", output,"'", sep="")
 
 # Send the message
 system(cmdString)
-
 
 
