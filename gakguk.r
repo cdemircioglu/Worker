@@ -12,6 +12,8 @@ library("methods")
 #args <- "<ShinnyParameters><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runnumber</name><value>20161031102213</value></parameter><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>msisdn</name><value>258493,1259860,1267845,1268277,1268509,1269925,1270078,1270582,1274345,1274776</value></parameter></ShinnyParameters>"
 args <- "RRRR"
 
+
+
 # Give the input file name to the function.
 xmlDoc <- xmlParse(args, asText=TRUE)
 
@@ -91,8 +93,8 @@ fun_Response <- function()
   #f_marketInterest <- sum(downloadBytes)/NROW(downloadBytes)/10099
   #f_afflunce <-  #Calculate afflunce based on MSISDN number
   f_sprayPray <- src_marketinterest[1,1] #Calculate spray and pray factor based on market interest
-  f_common <- base::merge(src_profile,src_xdr_bytes)
-  src_profile["RESPONSE"] <<- sqrt(f_common$DOWNLOAD_BYTES)*sqrt(f_common$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
+  src_profile["RESPONSE"] <<- sqrt(src_xdr_bytes$DOWNLOAD_BYTES)*sqrt(src_profile$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
+  
 }  
 
 #Economic Benefit function 
@@ -101,46 +103,27 @@ fun_EconomicBenefit <- function()
   src_profile["ECONOMICBENEFIT"] <<- (as.numeric(perceivedValue)*src_profile["RESPONSE"]) - as.numeric(costtoDeliver)
 }
 
-#Run the monte carlo 
-fun_MC <- function()
-{
-  for (n in src_profile$ECONOMICBENEFIT) {
-    randomVector <- sample.int(2, size = 100, replace = TRUE, prob = NULL)-1
-    tresult <- sapply(1:(length(randomVector)), function(j) trunc(sum(n*randomVector[j]),prec = 2))
-    fresult <<- fresult + tresult
-  }
-}
-
-
 
 ####CALL FUNCTIONS####
 fun_Afflunce()
 fun_Response()
 fun_EconomicBenefit()
 
-#Reset the factor
-fresult <<- seq(1,100)*0
-fun_MC()
-
 #Create the buckets
 buckets <- seq(-50, 200, by=2)
 
 #Create the bucketing logic
 finalset <- transform(src_profile, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:125]))
-finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 
 #Calculate the counts
 finalset <- finalset %>%
   group_by(LABEL) %>% 
   summarise_each(funs(n()),MSISDN)
 
-#Per customer 
-mcValue <- paste(round(fresult/nrow(finalset),digits=0),collapse=" ")
-
 #Create the dataset
 finalset <- as.data.frame(finalset)
 finalset["HOST"] <- gsub("\r","",src_xdr[1:nrow(finalset),3])
-#finalset["MCValue"] <- mcValue
+
 
 #Create the arguments string
 arg <- ""
@@ -150,7 +133,6 @@ for (row in 1:nrow(finalset)) {
   ####
   # Output string
   output <- '"2016-09-27","07:57:22",12345,98765,x86_64,"linux-gnu","BH","1.60.0-2","DE",23657'
-  #output <- gsub("DE",mcValue,output) #Replace the package with a website
   output <- gsub("linux-gnu",round(runif(1, 1, 25)),output) #Replace the package with a website
   output <- gsub("x86_64",runTime,output) #Replace the package with a website
   output <- gsub("BH",finalset[row,3],output) #Replace the package with a website
@@ -158,7 +140,6 @@ for (row in 1:nrow(finalset)) {
   output <- gsub("23657",round(runif(1, 1, 25)),output) #Replace the package with a website
   output <- gsub("12345",finalset[row,1],output) #Replace the package with a website
   output <- gsub("98765",finalset[row,2],output) #Replace the package with a website
-  
   
   arg <- paste(arg,output,sep="|")
   
@@ -171,7 +152,7 @@ for (row in 1:nrow(finalset)) {
 output <- substring(arg, 2) # Remove the first pipe
 
 # Command start
-cmdString <- paste("python send.py '", paste(mcValue,output,sep="_MM_"),"'", sep="")
+cmdString <- paste("python send.py '", output,"'", sep="")
 #cmdString <- paste('c:\\Python27\\python.exe send.py ', output, sep="")
 
 # Send the message
