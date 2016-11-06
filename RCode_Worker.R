@@ -136,7 +136,8 @@ finalset <- finalset %>%
   summarise_each(funs(n()),MSISDN)
 
 #Per customer 
-mcValue <- paste(round(fresult/nrow(finalset),digits=0),collapse=" ")
+mcValue <- paste(round(fresult/(nrow(finalset)*100),digits=0),collapse=" ")
+
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
