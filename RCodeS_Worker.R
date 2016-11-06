@@ -5,6 +5,17 @@ library(dplyr)
 library("XML")
 # Also load the other required package.
 library("methods")
+library("DBI")
+library("rJava")
+library("RJDBC")
+
+# Init of the classpath
+cp = c("/usr/lib/hive/lib/hive-jdbc.jar", "/usr/lib/hadoop/client/hadoop-common.jar", "/usr/lib/hive/lib/libthrift-0.9.2.jar", "/usr/lib/hive/lib/hive-service.jar", "/usr/lib/hive/lib/httpclient-4.2.5.jar", "/usr/lib/hive/lib/httpcore-4.2.5.jar", "/usr/lib/hive/lib/hive-jdbc-standalone.jar")
+.jinit(classpath=cp)
+
+#initialisation de la connexion
+drv <- JDBC("org.apache.hive.jdbc.HiveDriver", "/usr/lib/hive/lib/hive-jdbc.jar", identifier.quote="`")
+con <- dbConnect(drv, "jdbc:hive2://localhost:10000/testdata", "root", "KaraburunCe2")
 
 # Get the arguments
 #args <- commandArgs(trailingOnly = TRUE)
@@ -30,7 +41,7 @@ runTime <- parameterValue[7]
 msisdn <- parameterValue[8]
 
 #Create the connection string
-con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "127.0.0.1", port = 3306, dbname = "testdata")
+#con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "127.0.0.1", port = 3306, dbname = "testdata")
 
 #Create the query for xdr records
 src_query <- ("SELECT MSISDN, DOWNLOAD_BYTES,HOST FROM src_xdr WHERE MSISDN IN (aaa) AND IAB_TIER1 = 'bbb'")
