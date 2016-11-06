@@ -1,3 +1,5 @@
+import java.net.InetAddress;
+
 //javac GetJob.java -Xlint:unchecked
 
 class GetJob implements Runnable {
@@ -27,7 +29,10 @@ class GetJob implements Runnable {
 	            	while (true) //Loop indefinetly
 	            	{	            			            		
 	            		ReadMSISDN.setNum(ReceiveWorkServer.getNum());
+	            		   InetAddress addr = java.net.InetAddress.getLocalHost();
+	       	               String hostname = addr.getHostName();
 	            		 System.out.println(" [x] Worker server number '" + ReceiveWorkServer.getNum() + "'");
+	            		 System.out.println(" [x] Worker server number '" +Integer.parseInt(hostname.replace("HWWorker", ""))+ "'");
 	            		Thread.sleep(2000);	   //Sleep for two seconds 
 	            	}
 	            }	            
