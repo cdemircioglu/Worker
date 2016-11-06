@@ -78,6 +78,7 @@ public class ReadMSISDN {
 	      @Override
 	      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 	        String message = new String(body, "UTF-8");
+	        getServerName();
 	        System.out.println("Server number is " + ServerNumber + ", host number" + hostnamenumber);
 	        
 	        if (hostnamenumber > ServerNumber)
@@ -86,6 +87,7 @@ public class ReadMSISDN {
 	        	while(true)
 	        	{
 	        		wantSleep();
+	        		getServerName();
 	        		System.out.println("Server number is " + ServerNumber + ", rejecting the message.");
 	        		if (hostnamenumber <= ServerNumber)
 	        			break;
