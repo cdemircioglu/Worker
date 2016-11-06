@@ -78,7 +78,8 @@ public class ReadMSISDN {
 	      @Override
 	      public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 	        String message = new String(body, "UTF-8");
-
+	        System.out.println("Server number is " + ServerNumber + ", host number" + hostnamenumber);
+	        
 	        if (hostnamenumber > ServerNumber)
 	        {	        		        	
 	        	channel.basicNack(envelope.getDeliveryTag(), false, true);
