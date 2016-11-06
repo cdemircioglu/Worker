@@ -107,7 +107,8 @@ fun_MC <- function()
 {
   for (n in src_profile$ECONOMICBENEFIT) {
     randomVector <- sample.int(2, size = 100, replace = TRUE, prob = NULL)-1
-    tresult <- sapply(1:(length(randomVector)), function(j) trunc(sum(n*randomVector[j]),prec = 2))
+    #tresult <- sapply(1:(length(randomVector)), function(j) trunc(sum(n*randomVector[j]),prec = 2))
+    tresult <- sapply(1:(length(randomVector)), function(j) sum(n*randomVector[j]))
     fresult <<- fresult + tresult
   }
 }
@@ -136,7 +137,7 @@ finalset <- finalset %>%
   summarise_each(funs(n()),MSISDN)
 
 #Per customer 
-mcValue <- paste(round(fresult/(nrow(finalset)*100),digits=0),collapse=" ")
+mcValue <- paste(round(fresult/(nrow(finalset)*50),digits=0),collapse=" ")
 
 
 #Create the dataset
