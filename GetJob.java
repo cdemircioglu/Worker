@@ -14,7 +14,7 @@ class GetJob implements Runnable {
 	            if (threadName == "T1" )
 	            {
 	            	System.out.println("Calling the exchange.");
-	            	ReceiveWorkServer.CheckWorker();	            		            	
+	            	ReceiveWorkServer.CheckWorker();		            	
 	            }
 	            if (threadName == "T2" )
 	            {	
@@ -26,7 +26,8 @@ class GetJob implements Runnable {
 	            	System.out.println("Passing number of servers.");
 	            	while (true) //Loop indefinetly
 	            	{	            			            		
-	            		ReadMSISDN.setNum(ReceiveWorkServer.getNum());	            		 
+	            		ReadMSISDN.setNum(ReceiveWorkServer.getNum());
+	            		 System.out.println(" [x] Worker server number '" + ReceiveWorkServer.getNum() + "'");
 	            		Thread.sleep(2000);	   //Sleep for two seconds 
 	            	}
 	            }	            
