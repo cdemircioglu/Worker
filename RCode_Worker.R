@@ -93,7 +93,7 @@ fun_Response <- function()
   #f_afflunce <-  #Calculate afflunce based on MSISDN number
   f_sprayPray <- src_marketinterest[1,1] #Calculate spray and pray factor based on market interest
   f_common <- base::merge(src_profile,src_xdr_bytes)
-  src_profile["RESPONSE"] <<- sqrt(f_common$DOWNLOAD_BYTES)*sqrt(f_common$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
+  src_profile["RESPONSE"] <<- (ifelse(sqrt(f_common$DOWNLOAD_BYTES)>100, runif(1, 70, 90), sqrt(f_common$DOWNLOAD_BYTES)))*sqrt(f_common$AFFLUNCE)*as.numeric(perceivedValue)*f_sprayPray/1000
 }  
 
 #Economic Benefit function 
@@ -124,10 +124,10 @@ fresult <<- seq(1,100)*0
 fun_MC()
 
 #Create the buckets
-buckets <- seq(-50, 200, by=2)
+buckets <- seq(-50, 300, by=2)
 
 #Create the bucketing logic
-finalset <- transform(src_profile, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:125]))
+finalset <- transform(src_profile, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:175]))
 finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 
 #Calculate the counts
@@ -140,7 +140,7 @@ mcValue <- paste(round(fresult/nrow(finalset),digits=0),collapse=" ")
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
-finalset["HOST"] <- gsub("\r","",src_xdr[1:nrow(finalset),3])
+finalset["HOST"] <- gsub("https:","",gsub("\r","",src_xdr[1:nrow(finalset),3]))
 finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 #finalset["MCValue"] <- mcValue
 
@@ -179,5 +179,4 @@ cmdString <- paste("python send.py '", paste(mcValue,runCheck,output,sep="_MM_")
 
 # Send the message
 system(cmdString)
-
 
