@@ -24,6 +24,8 @@ public class ReadMSISDN {
 		  try {
 	            InetAddress addr = java.net.InetAddress.getLocalHost();
 	            String hostname = addr.getHostName();
+	            if (hostname=="HWLinux") 
+	            	hostname = "HWWorker1";
 	            hostnamenumber = Integer.parseInt(hostname.replace("HWWorker", ""));
 	        } catch (UnknownHostException e) {
 	            System.out.println(e);
