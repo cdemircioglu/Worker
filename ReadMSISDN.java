@@ -74,7 +74,7 @@ public class ReadMSISDN {
 	    channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
 	    
 	    //Set the number of message to grab. 
-	    channel.basicQos(1);
+	    channel.basicQos(5);
 
 	    final Consumer consumer = new DefaultConsumer(channel) {
 	      @Override
