@@ -31,7 +31,7 @@ class GetJob implements Runnable {
 	            		ReadMSISDN.setNum(ReceiveWorkServer.getNum());
 	            		   InetAddress addr = java.net.InetAddress.getLocalHost();
 	       	               String hostname = addr.getHostName();
-	       	            if (hostname=="HWLinux")
+	       	            if (hostname.equals("HWLinux"))
 	    	            	hostname = "HWWorker10";
 	            		 //System.out.println(" [x] Worker server number '" + ReceiveWorkServer.getNum() + "'");
 	            		 //System.out.println(" [x] Worker server number '" +Integer.parseInt(hostname.replace("HWWorker", ""))+ "'");
