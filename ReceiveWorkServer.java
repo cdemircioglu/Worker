@@ -10,7 +10,7 @@ public class ReceiveWorkServer {
 	//Main method to get the number of workers
 	public static void CheckWorker() throws Exception {
 	    ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("hwlinux.cloudapp.net");
+		factory.setHost("hwcontrol.cloudapp.net");
 		factory.setUsername("controller");
 		factory.setPassword("KaraburunCe2");
 	    Connection connection = factory.newConnection();

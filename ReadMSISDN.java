@@ -24,8 +24,8 @@ public class ReadMSISDN {
 		  try {
 	            InetAddress addr = java.net.InetAddress.getLocalHost();
 	            String hostname = addr.getHostName();
-	            if (hostname.equals("HWLinux"))
-	            	hostname = "HWWorker10";
+	            if (hostname.equals("HWControl"))
+	            	hostname = "HWWorker1";
 	            hostnamenumber = Integer.parseInt(hostname.replace("HWWorker", ""));
 	        } catch (UnknownHostException e) {
 	            System.out.println(e);
@@ -64,7 +64,7 @@ public class ReadMSISDN {
 		
 		//Create the connection 
 	    ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("hwlinux.cloudapp.net");
+		factory.setHost("hwcontrol.cloudapp.net");
 		factory.setUsername("controller");
 		factory.setPassword("KaraburunCe2");
 
