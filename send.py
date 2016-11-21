@@ -5,7 +5,7 @@ import sys
 print sys.argv[1]
 
 credentials = pika.PlainCredentials('controller', 'KaraburunCe2')
-parameters = pika.ConnectionParameters('HWLinux.cloudapp.net',5672,'/',credentials)
+parameters = pika.ConnectionParameters('hwcontrol.cloudapp.net',5672,'/',credentials)
 ##parameters = pika.ConnectionParameters('localhost',5672,'/',credentials)
 
 connection = pika.BlockingConnection(parameters)
