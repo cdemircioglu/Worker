@@ -25,17 +25,17 @@ marketInterest <- parameterValue[2]
 perceivedValue <- as.numeric(parameterValue[3])
 costtoDeliver <- as.numeric(parameterValue[4])
 runCheck <- parameterValue[5]
-runnumber <- parameterValue[6]
-runTime <- parameterValue[7]
-msisdn <- parameterValue[8]
-marketInterestID <- parameterValue[9]
-sprayprayUptake <- as.numeric(parameterValue[10])
+promotionalCost <<- as.numeric(parameterValue[6])
+captiveMonths <<- as.numeric(parameterValue[7])
+runnumber <- parameterValue[8]
+runTime <- parameterValue[9]
+msisdn <- parameterValue[10]
+marketInterestID <- parameterValue[11]
+sprayprayUptake <- as.numeric(parameterValue[12])
 
 #New parameters
 monthlyPrice <<- perceivedValue
 monthlyCost <<- costtoDeliver
-promotionalCost <<- as.numeric(parameterValue[11])
-captiveMonths <<- as.numeric(parameterValue[12])
 lifecyleYears <<- 2.5
 growthRate <<- 0
 churn <<- 0.05
