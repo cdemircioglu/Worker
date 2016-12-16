@@ -9,7 +9,7 @@ library("XML")
 # Get the arguments
 #args <- commandArgs(trailingOnly = TRUE)
 #args <- "<ShinnyParameters><parameter><name>servercnt</name><value>3</value></parameter><parameter><name>marketInterest</name><value>INVESTING</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>10</value></parameter><parameter><name>runCheck</name><value>2016</value></parameter><parameter><name>runnumber</name><value>20161031102213</value></parameter><parameter><name>runtime</name><value>1000</value></parameter><parameter><name>msisdn</name><value>5348,5599,7143,7461,8583,8717,9447,9453,9639,9937,10042,10166,10327,10385,10570,10746,10749,10900,10930,10940,11013,11288,11413,11460,11537,11549,11654,11682,11920,11943,11996,12003,12033,12055,12096,12105,12379,12380,12446,12643,12676,12720,12808,12862,12899,12917,12985,13037,13053,13142,13147,13214,13337,13342,13346,13390,13407,13420,13501,13521,13555,13677,13684,13734,13787,13788,13800,13855,13870,13901,13906,13935,13953,13965,14101,14125,14141,14145,14153,14227,14240,14291,14352,14385,14390,14422,14435,14447,14495,14566,14708,14714,14806,14868,14875,14931,14941,14944,14975,15006</value></parameter><parameter><name>marketinterestid</name><value>5</value></parameter><parameter><name>sprayprayuptake</name><value>0.5</value></parameter></ShinnyParameters>"
-#args <- "<ShinnyParameters><parameter><name>servercnt</name><value>10</value></parameter><parameter><name>marketInterest</name><value>MOVIES</value></parameter><parameter><name>perceivedValue</name><value>40</value></parameter><parameter><name>costtoDeliver</name><value>40</value></parameter><parameter><name>runCheck</name><value>1</value></parameter><parameter><name>runnumber</name><value>20161123055954</value></parameter><parameter><name>runtime</name><value>2144253</value></parameter><parameter><name>msisdn</name><value>03629,303630,303631,303632,303633,303634,303635,303636,303637,303638,303639,303640,303642,303644,303645,303646,303647,303648,303649,303650,303652,303654,303655,303656,303657,303659,303660,303661,303662,303663,303664,303665,303666,303668,303669,303670,303671,303672,303673,303674,303675,303676,303677,303678,303679,303680,303681,303682,303683,303684,303685,303686,303687,303688,303689,303691,303692,303694,303695,303696,303698,303699,303700,303702,303703,303704,303705,303706,303707,303708,303710,303711,303712,303713,303714,303715,303716,303717,303718,303719,303720,303721,303722,303723,303724,303725,303726,303727,303728,303730,303731,303732,303733,303734,303735,303736,303737,303738,303739,303740</value></parameter><parameter><name>marketinterestid</name><value>13</value></parameter><parameter><name>sprayprayuptake</name><value>0.10</value></parameter></ShinnyParameters>"
+#args <- "<ShinnyParameters><parameter><name>servercnt</name><value>10</value></parameter><parameter><name>marketInterest</name><value>MOVIES</value></parameter><parameter><name>perceivedValue</name><value>70</value></parameter><parameter><name>costtoDeliver</name><value>40</value></parameter><parameter><name>runCheck</name><value>1</value></parameter><parameter><name>runnumber</name><value>20161123055954</value></parameter><parameter><name>runtime</name><value>2144253</value></parameter><parameter><name>msisdn</name><value>03629,303630,303631,303632,303633,303634,303635,303636,303637,303638,303639,303640,303642,303644,303645,303646,303647,303648,303649,303650,303652,303654,303655,303656,303657,303659,303660,303661,303662,303663,303664,303665,303666,303668,303669,303670,303671,303672,303673,303674,303675,303676,303677,303678,303679,303680,303681,303682,303683,303684,303685,303686,303687,303688,303689,303691,303692,303694,303695,303696,303698,303699,303700,303702,303703,303704,303705,303706,303707,303708,303710,303711,303712,303713,303714,303715,303716,303717,303718,303719,303720,303721,303722,303723,303724,303725,303726,303727,303728,303730,303731,303732,303733,303734,303735,303736,303737,303738,303739,303740</value></parameter><parameter><name>marketinterestid</name><value>13</value></parameter><parameter><name>sprayprayuptake</name><value>0.10</value></parameter><parameter><name>promotionalCost</name><value>1</value></parameter><parameter><name>captiveMonths</name><value>10</value></parameter></ShinnyParameters>"
 args <- "RRRR"
 
 # Give the input file name to the function.
@@ -31,9 +31,21 @@ msisdn <- parameterValue[8]
 marketInterestID <- parameterValue[9]
 sprayprayUptake <- as.numeric(parameterValue[10])
 
+#New parameters
+monthlyPrice <<- perceivedValue
+monthlyCost <<- costtoDeliver
+promotionalCost <<- as.numeric(parameterValue[11])
+captiveMonths <<- as.numeric(parameterValue[12])
+lifecyleYears <<- 2.5
+growthRate <<- 0
+churn <<- 0.05
+variableMonths <<- captiveMonths
+
+
+
 
 #Create the connection string
-con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "localhost", port = 3306, dbname = "openroads")
+con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "hwcontrol.cloudapp.net", port = 3306, dbname = "openroads")
 
 #Create the query for xdr records
 src_query <- ("SELECT MSISDN, CREDITSCORE, HHINCOME, ASSETS, DOWNLOADBYTES FROM fct_marketinterest WHERE MSISDN IN (aaa) AND MARKETINTERESTID = 'bbb'")
@@ -52,6 +64,47 @@ dbDisconnect(con)
 
 ####FUNCTIONS####
 
+#Churn function definition
+fun_churn <- function(captiveMonths)
+{
+  p <- 0
+  for(ii in 1:captiveMonths)
+  {
+    p <- p + (1-churn)^ii
+  }
+  p
+}
+
+#LCV function
+fun_LCV <- function(variableMonths,data)
+{
+  #variableMonths
+  data$CURRENTNUMBEROFMONTHSINPLAN <- data[,1]%%29+1
+  
+  #This is for the cost calculation constant
+  LCVConstant <- if(variableMonths > 0) 1 else 0 #To include the -MP-PC cost or not. 
+  
+  #Result set
+  result <- data.frame(LCV=numeric())
+  
+  for(i in 1:nrow(data))
+  {
+    divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
+    
+    r <- (
+      (monthlyPrice-monthlyCost)* #MP-MC
+        (1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
+        ((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))* #(LY-CP)
+        fun_churn(((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))-variableMonths/12)/ #churn
+        abs(((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))-(variableMonths/12)+divisionConstant) #(LP-CP-CM)
+    )+LCVConstant*(-monthlyPrice-promotionalCost) #(-MP-PC)
+    
+    result <- rbind(result,r)
+  }
+  result
+}
+
+
 #Afflunce function 
 fun_Afflunce <- function()
 {
@@ -60,11 +113,34 @@ fun_Afflunce <- function()
   
   #Calculations
   #x <- (creditScore/860*(assets + 3*houseHoldIncome + 100000))/100000
-  
   src_xdr["AFFLUNCE"] <<- src_xdr[,2]/860*(src_xdr[,4]+3*src_xdr[,3])/100000
-  src_xdr["RESPONSE"] <<- sqrt(as.numeric(src_xdr$DOWNLOADBYTES))*sqrt(src_xdr$AFFLUNCE)*perceivedValue*sprayprayUptake/1000
+  
+  #Find the max affluence per group
+  max_affluence <- max(src_xdr["AFFLUNCE"])
+  
+  #Normalize the affluence
+  src_xdr["AFFLUNCE"] <<- src_xdr["AFFLUNCE"]/max_affluence
+  
+  #Calculate the response
+  #src_xdr["RESPONSE"] <<- sqrt(as.numeric(src_xdr$DOWNLOADBYTES))*sqrt(src_xdr$AFFLUNCE)*perceivedValue*sprayprayUptake/1000
+  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake
+  
+  #Calculate the number of months in the plan
+  #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
+  
+  #Set the economic benefit
+  src_xdr["ECONOMICBENEFIT"] <<- fun_LCV(captiveMonths,src_xdr) - fun_LCV(0,src_xdr) 
+  
+  #Find the users who would take the offer Response > 0.5
+  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.05] <<- -promotionalCost #The people, not affluent enough, to take the offer.
+  src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
+  src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
+  #src_xdr[which(src_xdr$RESPONSE>0.05 && src_xdr$ECONOMICBENEFIT<0, arr.ind=TRUE),9] <<- 0 #The people we don't care to work with.
+  
+  #Calculate the economic benefit
   #src_xdr["ECONOMICBENEFIT"] <<- (perceivedValue*src_xdr["RESPONSE"])/max(src_xdr["RESPONSE"]*1.2) - costtoDeliver
-  src_xdr["ECONOMICBENEFIT"] <<- (perceivedValue*1.8*src_xdr["RESPONSE"])/abs(max(src_xdr["RESPONSE"])) - costtoDeliver
+  #src_xdr["ECONOMICBENEFIT"] <<- (perceivedValue*1.8*src_xdr["RESPONSE"])/abs(max(src_xdr["RESPONSE"])) - costtoDeliver
+  #src_xdr["ECONOMICBENEFIT"] <<- fun_LCV() - fun_LCV(0)
 }
 
 #Run the monte carlo 
@@ -90,10 +166,10 @@ fresult <<- seq(1,100)*0
 fun_MC()
 
 #Create the buckets
-buckets <- seq(-50, 300, by=2)
+buckets <- seq(-200, 1000, by=2)
 
 #Create the bucketing logic
-finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:175]))
+finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:600]))
 finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 
 #Calculate the counts
