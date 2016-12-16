@@ -45,7 +45,8 @@ variableMonths <<- captiveMonths
 
 
 #Create the connection string
-con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "hwcontrol.cloudapp.net", port = 3306, dbname = "openroads")
+#con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "hwcontrol.cloudapp.net", port = 3306, dbname = "openroads")
+con <-  dbConnect(RMySQL::MySQL(),username = "root", password = "KaraburunCe2", host = "localhost", port = 3306, dbname = "openroads")
 
 #Create the query for xdr records
 src_query <- ("SELECT MSISDN, CREDITSCORE, HHINCOME, ASSETS, DOWNLOADBYTES FROM fct_marketinterest WHERE MSISDN IN (aaa) AND MARKETINTERESTID = 'bbb'")
