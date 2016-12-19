@@ -193,6 +193,9 @@ finalset <- finalset %>%
 #Per customer 
 mcValue <- paste(2*round(fresult/nrow(src_xdr),digits=0),collapse=" ")
 
+#Write the src_xdr records
+write.csv(src_xdr, "eggs.csv", append = TRUE)
+
 #Create the dataset
 finalset <- as.data.frame(finalset)
 finalset["HOST"] <- "na.com"
