@@ -168,6 +168,7 @@ src_xdr <- src_xdr[complete.cases(src_xdr),]
 #Find the people who would take up the offer
 src_ori <- src_xdr #Keep the original
 src_xdr <- src_xdr[src_xdr$ECONOMICBENEFIT != -1*promotionalCost,]
+src_xdr <- src_xdr[is.finite(src_xdr$ECONOMICBENEFIT),]
 
 #Reset the factor
 fresult <<- seq(1,100)*0
