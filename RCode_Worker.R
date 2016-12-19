@@ -177,10 +177,11 @@ fun_MC()
 maxb <- max(src_xdr$ECONOMICBENEFIT)
 minb <- min(src_xdr$ECONOMICBENEFIT)
 byb <- floor((maxb-minb)/50)
-buckets <- seq(minb, maxb, by=byb)
+buckets <- c(0,seq(minb, maxb, by=byb))
+buckets <- sort(unique(buckets))
 
 #Create the bucketing logic
-finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets))
+finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:length(buckets)-1]))
 finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 
 #Calculate the counts
