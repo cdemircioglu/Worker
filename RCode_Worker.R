@@ -179,7 +179,7 @@ maxb <- max(src_xdr$ECONOMICBENEFIT)
 minb <- min(src_xdr$ECONOMICBENEFIT)
 byb <- floor((maxb-minb)/50)
 buckets <- c(0,seq(minb, maxb, by=byb))
-buckets <- sort(unique(buckets))
+buckets <- sort(unique(as.integer(buckets)))
 
 #Create the bucketing logic
 finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:length(buckets)-1]))
