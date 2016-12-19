@@ -162,6 +162,13 @@ fun_Afflunce()
 #fun_Response()
 #fun_EconomicBenefit()
 
+#Remove the NA's from the data frame
+src_xdr <- src_xdr[complete.cases(src_xdr),]
+
+#Find the people who would take up the offer
+src_ori <- src_xdr #Keep the original
+src_xdr <- src_xdr[src_xdr$ECONOMICBENEFIT != -1*promotionalCost,]
+
 #Reset the factor
 fresult <<- seq(1,100)*0
 fun_MC()
