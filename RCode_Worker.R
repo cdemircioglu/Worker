@@ -134,8 +134,8 @@ fun_Afflunce <- function()
   
   #Find the users who would take the offer Response > 0.5
   src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.05] <<- -promotionalCost #The people, not affluent enough, to take the offer.
-  src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
-  src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
+  #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
+  #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
   #src_xdr[which(src_xdr$RESPONSE>0.05 && src_xdr$ECONOMICBENEFIT<0, arr.ind=TRUE),9] <<- 0 #The people we don't care to work with.
   
   #Calculate the economic benefit
@@ -174,10 +174,13 @@ fresult <<- seq(1,100)*0
 fun_MC()
 
 #Create the buckets
-buckets <- seq(-200, 1000, by=2)
+maxb <- max(src_xdr$ECONOMICBENEFIT)
+minb <- min(src_xdr$ECONOMICBENEFIT)
+byb <- floor((maxb-minb)/50)
+buckets <- seq(minb, maxb, by=byb)
 
 #Create the bucketing logic
-finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:600]))
+finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets))
 finalset <- finalset[complete.cases(finalset),] #Remove na figures, if any
 
 #Calculate the counts
@@ -186,7 +189,7 @@ finalset <- finalset %>%
   summarise_each(funs(n()),MSISDN)
 
 #Per customer 
-mcValue <- paste(2*round(fresult/nrow(src_xdr),digits=0),collapse=" ")
+mcValue <- paste(round(fresult/nrow(src_xdr),digits=0),collapse=" ")
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
