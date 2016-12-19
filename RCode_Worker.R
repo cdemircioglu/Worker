@@ -80,7 +80,7 @@ fun_churn <- function(captiveMonths)
 fun_LCV <- function(variableMonths,data)
 {
   #variableMonths
-  data$CURRENTNUMBEROFMONTHSINPLAN <- data[,1]%%29+1
+  data$CURRENTNUMBEROFMONTHSINPLAN <- data[,5]%%40+1
   
   #This is for the cost calculation constant
   LCVConstant <- if(variableMonths > 0) 1 else 0 #To include the -MP-PC cost or not. 
