@@ -194,7 +194,7 @@ finalset <- finalset %>%
 mcValue <- paste(2*round(fresult/nrow(src_xdr),digits=0),collapse=" ")
 
 #Write the src_xdr records
-write.csv(src_xdr, "eggs.csv", append = TRUE)
+write.table(src_xdr, file="eggs.csv", append=TRUE, row.names=TRUE, col.names=FALSE,  sep=",")
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
