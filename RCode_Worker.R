@@ -126,10 +126,10 @@ fun_Afflunce <- function()
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
   
   #Set the economic benefit
-  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])*5+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
+  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])*4+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
-  #src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.03] <<- -promotionalCost*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
+  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.03] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
   #src_xdr[which(src_xdr$RESPONSE>0.05 && src_xdr$ECONOMICBENEFIT<0, arr.ind=TRUE),9] <<- 0 #The people we don't care to work with.
