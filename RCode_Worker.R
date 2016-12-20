@@ -123,7 +123,7 @@ fun_Afflunce <- function()
   
   #Calculate the response
   #src_xdr["RESPONSE"] <<- sqrt(as.numeric(src_xdr$DOWNLOADBYTES))*sqrt(src_xdr$AFFLUNCE)*perceivedValue*sprayprayUptake/1000
-  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake*src_xdr$DOWNLOADBYTES/max_download*4
+  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake*src_xdr$DOWNLOADBYTES/max_download*2
   
   #Calculate the number of months in the plan
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
