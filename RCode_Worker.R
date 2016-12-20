@@ -82,7 +82,7 @@ fun_LCV <- function(variableMonths,data)
   
   #variableMonths
   data$CURRENTNUMBEROFMONTHSINPLAN <- data[,5]%%40+1
-
+  
   #Result set
   result <- data.frame(LCV=numeric())
   
@@ -91,10 +91,10 @@ fun_LCV <- function(variableMonths,data)
     divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
     
     r <- (
-        (monthlyPrice-monthlyCost)* #MP-MC
+      (monthlyPrice-monthlyCost)* #MP-MC
         (1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
         (lifecyleYears+captiveMonths/12) #(LP-CP-CM)
-    )+(-monthlyPrice-promotionalCost) #(-MP-PC)
+    ) #(-MP-PC) #Moved after P(i) calculation
     
     result <- rbind(result,r)
   }
@@ -126,10 +126,10 @@ fun_Afflunce <- function()
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
   
   #Set the economic benefit
-  src_xdr["ECONOMICBENEFIT"] <<- fun_LCV(captiveMonths,src_xdr) #- fun_LCV(0,src_xdr) 
+  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*10.0*src_xdr["RESPONSE"])+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
-  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.05] <<- -promotionalCost #The people, not affluent enough, to take the offer.
+  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.02] <<- -promotionalCost #The people, not affluent enough, to take the offer.
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
   #src_xdr[which(src_xdr$RESPONSE>0.05 && src_xdr$ECONOMICBENEFIT<0, arr.ind=TRUE),9] <<- 0 #The people we don't care to work with.
