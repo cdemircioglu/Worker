@@ -37,12 +37,9 @@ sprayprayUptake <- as.numeric(parameterValue[13])
 #New parameters
 monthlyPrice <<- perceivedValue
 monthlyCost <<- costtoDeliver
-lifecyleYears <<- 2.5
 growthRate <<- 0
-churn <<- 0.05
+#churn <<- 0.05
 variableMonths <<- captiveMonths
-
-print(churnRate)
 
 
 #Create the connection string
@@ -80,12 +77,12 @@ fun_churn <- function(captiveMonths)
 #LCV function
 fun_LCV <- function(variableMonths,data)
 {
+  #Churn rate
+  lifecyleYears <- (1/(log(100,base=exp(1))-log((100 - churnRate),base=exp(1))))/12.0
+  
   #variableMonths
   data$CURRENTNUMBEROFMONTHSINPLAN <- data[,5]%%40+1
-  
-  #This is for the cost calculation constant
-  LCVConstant <- if(variableMonths > 0) 1 else 0 #To include the -MP-PC cost or not. 
-  
+
   #Result set
   result <- data.frame(LCV=numeric())
   
@@ -94,12 +91,10 @@ fun_LCV <- function(variableMonths,data)
     divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
     
     r <- (
-      (monthlyPrice-monthlyCost)* #MP-MC
+        (monthlyPrice-monthlyCost)* #MP-MC
         (1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
-        ((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))* #(LY-CP)
-        fun_churn(((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))-variableMonths/12)/ #churn
-        abs(((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))-(variableMonths/12)+divisionConstant) #(LP-CP-CM)
-    )+LCVConstant*(-monthlyPrice-promotionalCost) #(-MP-PC)
+        (lifecyleYears+captiveMonths/12) #(LP-CP-CM)
+    )+(-monthlyPrice-promotionalCost) #(-MP-PC)
     
     result <- rbind(result,r)
   }
@@ -131,7 +126,7 @@ fun_Afflunce <- function()
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
   
   #Set the economic benefit
-  src_xdr["ECONOMICBENEFIT"] <<- fun_LCV(captiveMonths,src_xdr) - fun_LCV(0,src_xdr) 
+  src_xdr["ECONOMICBENEFIT"] <<- fun_LCV(captiveMonths,src_xdr) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
   src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.05] <<- -promotionalCost #The people, not affluent enough, to take the offer.
