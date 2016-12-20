@@ -27,11 +27,12 @@ costtoDeliver <- as.numeric(parameterValue[4])
 runCheck <- parameterValue[5]
 promotionalCost <<- as.numeric(parameterValue[6])
 captiveMonths <<- as.numeric(parameterValue[7])
-runnumber <- parameterValue[8]
-runTime <- parameterValue[9]
-msisdn <- parameterValue[10]
-marketInterestID <- parameterValue[11]
-sprayprayUptake <- as.numeric(parameterValue[12])
+churnRate <<- as.numeric(parameterValue[8])
+runnumber <- parameterValue[9]
+runTime <- parameterValue[10]
+msisdn <- parameterValue[11]
+marketInterestID <- parameterValue[12]
+sprayprayUptake <- as.numeric(parameterValue[13])
 
 #New parameters
 monthlyPrice <<- perceivedValue
@@ -41,7 +42,7 @@ growthRate <<- 0
 churn <<- 0.05
 variableMonths <<- captiveMonths
 
-
+print(churnRate)
 
 
 #Create the connection string
