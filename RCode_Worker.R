@@ -129,7 +129,7 @@ fun_Afflunce <- function()
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
   
   #Set the economic benefit
-  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])*4+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
+  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
   src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.03] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
@@ -176,7 +176,7 @@ fun_MC()
 #Create the buckets
 maxb <- max(src_xdr$ECONOMICBENEFIT)
 minb <- min(src_xdr$ECONOMICBENEFIT)
-byb <- floor((maxb-minb)/50)
+byb <- floor((maxb-minb)/30)
 buckets <- c(0,seq(minb, maxb, by=byb))
 buckets <- sort(unique(as.integer(buckets)))
 
