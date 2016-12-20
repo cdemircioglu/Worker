@@ -115,12 +115,15 @@ fun_Afflunce <- function()
   #Find the max affluence per group
   max_affluence <- max(src_xdr["AFFLUNCE"])
   
+  #Find the max download bytes 
+  max_download <- max(src_xdr["DOWNLOADBYTES"])
+  
   #Normalize the affluence
   src_xdr["AFFLUNCE"] <<- src_xdr["AFFLUNCE"]/max_affluence
   
   #Calculate the response
   #src_xdr["RESPONSE"] <<- sqrt(as.numeric(src_xdr$DOWNLOADBYTES))*sqrt(src_xdr$AFFLUNCE)*perceivedValue*sprayprayUptake/1000
-  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake
+  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake*src_xdr$DOWNLOADBYTES/max_download
   
   #Calculate the number of months in the plan
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
@@ -190,7 +193,7 @@ finalset <- finalset %>%
 mcValue <- paste(2*round(fresult/nrow(src_xdr),digits=0),collapse=" ")
 
 #Write the src_xdr records
-write.table(src_xdr, file="eggs.csv", append=TRUE, row.names=TRUE, col.names=FALSE,  sep=",")
+#write.table(src_xdr, file="eggs.csv", append=TRUE, row.names=TRUE, col.names=FALSE,  sep=",")
 
 #Create the dataset
 finalset <- as.data.frame(finalset)
