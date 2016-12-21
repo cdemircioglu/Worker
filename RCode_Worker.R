@@ -200,7 +200,7 @@ finalset <- finalset %>%
   summarise_each(funs(n()),MSISDN)
 
 #Per customer 
-mcValue <- paste(2*round(fresult/nrow(src_xdr),digits=0),collapse=" ")
+mcValue <- paste(round(2*fresult/nrow(src_xdr),digits=0),collapse=" ")
 
 #Write the src_xdr records
 #write.table(src_xdr, file="eggs.csv", append=TRUE, row.names=TRUE, col.names=FALSE,  sep=",")
