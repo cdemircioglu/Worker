@@ -104,6 +104,8 @@ fun_LCV <- function(variableMonths,data)
 }
 
 
+
+
 #Afflunce function 
 fun_Afflunce <- function()
 {
@@ -125,7 +127,7 @@ fun_Afflunce <- function()
   
   #Calculate the response
   #src_xdr["RESPONSE"] <<- sqrt(as.numeric(src_xdr$DOWNLOADBYTES))*sqrt(src_xdr$AFFLUNCE)*perceivedValue*sprayprayUptake/1000
-  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake*src_xdr$DOWNLOADBYTES/max_download*3
+  src_xdr["RESPONSE"] <<- src_xdr$AFFLUNCE*sprayprayUptake*src_xdr$DOWNLOADBYTES/max_download*6
   
   #Adjust the response
   mres <- min(src_xdr["RESPONSE"])
@@ -148,6 +150,8 @@ fun_Afflunce <- function()
   #src_xdr["ECONOMICBENEFIT"] <<- (perceivedValue*1.8*src_xdr["RESPONSE"])/abs(max(src_xdr["RESPONSE"])) - costtoDeliver
   #src_xdr["ECONOMICBENEFIT"] <<- fun_LCV() - fun_LCV(0)
 }
+
+
 
 #Run the monte carlo 
 fun_MC <- function()
