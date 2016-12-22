@@ -142,7 +142,10 @@ fun_Afflunce <- function()
   src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])#+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
-  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
+  #src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
+  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -0.0001 #-promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
+  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.03 && src_xdr$RESPONSE > 0.01] <<- -1*promotionalCost*src_xdr["RESPONSE"] #*src_xdr["RESPONSE"] #Customers who use the offer just for a month. 
+  
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
   #src_xdr[which(src_xdr$RESPONSE>0.05 && src_xdr$ECONOMICBENEFIT<0, arr.ind=TRUE),9] <<- 0 #The people we don't care to work with.
@@ -178,7 +181,7 @@ src_xdr <- src_xdr[complete.cases(src_xdr),]
 
 #Find the people who would take up the offer
 src_ori <- src_xdr #Keep the original
-src_xdr <- src_xdr[src_xdr$ECONOMICBENEFIT != -1*promotionalCost,]
+src_xdr <- src_xdr[src_xdr$ECONOMICBENEFIT != -0.0001,]
 src_xdr <- src_xdr[is.finite(src_xdr$ECONOMICBENEFIT),]
 
 #Reset the factor
