@@ -188,9 +188,18 @@ fun_MC()
 #Create the buckets
 maxb <- max(src_xdr$ECONOMICBENEFIT)
 minb <- min(src_xdr$ECONOMICBENEFIT)
-byb <- floor((maxb-minb)/30)
+byb <- ((maxb-minb)/30)
+byb <- if(byb == 0) 0.01 else byb
 buckets <- c(0,seq(minb, maxb, by=byb))
-buckets <- sort(unique(as.integer(buckets)))
+if (maxb-minb > 1)
+{
+  buckets <- sort(unique(as.integer(buckets)))
+}
+else
+{
+  buckets <- sort(unique(floor(buckets*1000)/1000))
+}
+
 
 #Create the bucketing logic
 finalset <- transform(src_xdr, LABEL=cut(ECONOMICBENEFIT,breaks=buckets,labels=buckets[1:length(buckets)-1]))
