@@ -75,32 +75,34 @@ fun_churn <- function(captiveMonths)
   }
   p
 }
-
 #LCV function
 fun_LCV <- function(variableMonths,data)
 {
   #Churn rate
-  lifecyleYears <- (1/(log(100,base=exp(1))-log((100 - churnRate),base=exp(1))))/12.0
+  #lifecyleYears <- (1/(log(100,base=exp(1))-log((100 - churnRate),base=exp(1))))/12.0
   
   #variableMonths
-  data$CURRENTNUMBEROFMONTHSINPLAN <- data[,5]%%40+1
+  #data$CURRENTNUMBEROFMONTHSINPLAN <- data[,5]%%40+1
   
   #Result set
   result <- data.frame(LCV=numeric())
   
-  for(i in 1:nrow(data))
+  #for(i in 1:nrow(data))
   {
-    divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
+    #divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
     
     r <- (
-      (monthlyPrice-monthlyCost)* #MP-MC
-        (1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
-        (lifecyleYears+captiveMonths/12) #(LP-CP-CM)
+      (monthlyPrice-monthlyCost+5)*captiveMonths+ #(OP - OC + 5)*CM
+        (-promotionalCost-monthlyCost) #(- PC - OC)
+      
+      #(1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
+      #(lifecyleYears+captiveMonths/12) #(LP-CP-CM)
     ) #(-MP-PC) #Moved after P(i) calculation
     
-    result <- rbind(result,r)
+    #result <- rbind(result,r)
+    r
   }
-  result
+  #result
 }
 
 
@@ -131,13 +133,13 @@ fun_Afflunce <- function()
   
   #Adjust the response
   mres <- min(src_xdr["RESPONSE"])
-  src_xdr["RESPONSE"] <- src_xdr["RESPONSE"] - mres
+  src_xdr["RESPONSE"] <<- src_xdr["RESPONSE"] - mres
   
   #Calculate the number of months in the plan
   #src_xdr["CURRENTNUMBEROFMONTHSINPLAN"] <<- src_xdr[,1]%%29+1
   
   #Set the economic benefit
-  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
+  src_xdr["ECONOMICBENEFIT"] <<- (fun_LCV(captiveMonths,src_xdr)*src_xdr["RESPONSE"])#+(-monthlyPrice-promotionalCost) #- fun_LCV(0,src_xdr) 
   
   #Find the users who would take the offer Response > 0.5
   src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
