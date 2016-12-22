@@ -144,7 +144,8 @@ fun_Afflunce <- function()
   #Find the users who would take the offer Response > 0.5
   #src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
   src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.01] <<- -0.0001 #-promotionalCost#*src_xdr["RESPONSE"] #The people, not affluent enough, to take the offer.
-  src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.03 && src_xdr$RESPONSE > 0.01] <<-unlist( -1*promotionalCost*src_xdr["RESPONSE"]) #*src_xdr["RESPONSE"] #Customers who use the offer just for a month. 
+  #src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.015 && src_xdr$RESPONSE > 0.01] <<-unlist( -1*promotionalCost*src_xdr["RESPONSE"]) #*src_xdr["RESPONSE"] #Customers who use the offer just for a month. 
+  #src_xdr$ECONOMICBENEFIT[src_xdr$RESPONSE<0.020 && src_xdr$RESPONSE > 0.015] <<- - monthlyCost - promotionalCost + 5 #People who take the offer only for one month
   
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT< -200] <<- -200 #Lowend
   #src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT> 1000] <<- 1000 #Highend
