@@ -161,7 +161,7 @@ fun_Afflunce <- function()
 #Run the monte carlo 
 fun_MC <- function()
 {
-  for (n in src_xdr$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT>0]) {
+  for (n in data$ECONOMICBENEFIT[src_xdr$ECONOMICBENEFIT != -1*promotionalCost*src_xdr$RESPONSE]) {
     randomVector <- sample.int(2, size = 100, replace = TRUE, prob = NULL)-1
     #tresult <- sapply(1:(length(randomVector)), function(j) trunc(sum(n*randomVector[j]),prec = 2))
     tresult <- sapply(1:(length(randomVector)), function(j) sum(n*randomVector[j]))
