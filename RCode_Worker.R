@@ -194,9 +194,7 @@ buckets <- c(0,seq(minb, maxb, by=byb))
 if (maxb-minb > 1)
 {
   buckets <- sort(unique(as.integer(buckets)))
-}
-else
-{
+} else {
   buckets <- sort(unique(floor(buckets*1000)/1000))
 }
 
