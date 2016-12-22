@@ -92,7 +92,7 @@ fun_LCV <- function(variableMonths,data)
     #divisionConstant <- if(lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]-variableMonths/12 == 0) 1 else 0 #avoid division by zero error.
     
     r <- (
-      (monthlyPrice-monthlyCost+5)*captiveMonths+ #(OP - OC + 5)*CM
+      (monthlyPrice-monthlyCost+5.01)*captiveMonths+ #(OP - OC + 5)*CM
         (-promotionalCost-monthlyCost) #(- PC - OC)
       
       #(1+growthRate)^((lifecyleYears-data$CURRENTNUMBEROFMONTHSINPLAN[i]/12))*12* #(1-GR)^(LY-CP)
